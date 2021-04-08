@@ -1,0 +1,366 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check ALB & cloudfront setting 1`] = `
+Object {
+  "Resources": Object {
+    "Alb302Redirect610ABF15": Object {
+      "DependsOn": Array [
+        "VpcPublicSubnet1DefaultRoute3DA9E72A",
+        "VpcPublicSubnet2DefaultRoute97F91067",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "Alb302RedirectSecurityGroupDF0A30D2",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+          },
+          Object {
+            "Ref": "VpcPublicSubnet2Subnet691E08A3",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "Alb302RedirectAlb302RedirectRule473E60D9": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "RedirectConfig": Object {
+              "Host": "neverssl.com",
+              "Path": "/",
+              "Protocol": "HTTP",
+              "StatusCode": "HTTP_302",
+            },
+            "Type": "redirect",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "Alb302Redirect610ABF15",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "Alb302RedirectSecurityGroupDF0A30D2": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB http302demoAlb302Redirect0EDBCCB6",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DemoCloudFrontCFDistributionDD56E6FE": Object {
+      "Properties": Object {
+        "DistributionConfig": Object {
+          "DefaultCacheBehavior": Object {
+            "AllowedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "CachedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "ForwardedValues": Object {
+              "Cookies": Object {
+                "Forward": "none",
+              },
+              "QueryString": false,
+            },
+            "LambdaFunctionAssociations": Array [
+              Object {
+                "EventType": "origin-response",
+                "LambdaFunctionARN": Object {
+                  "Ref": "LambdaVersionhttp30247FAA424",
+                },
+              },
+            ],
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "allow-all",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": Array [
+            Object {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "CustomOriginConfig": Object {
+                "HTTPPort": 80,
+                "HTTPSPort": 443,
+                "OriginKeepaliveTimeout": 5,
+                "OriginProtocolPolicy": "http-only",
+                "OriginReadTimeout": 30,
+                "OriginSSLProtocols": Array [
+                  "TLSv1.2",
+                ],
+              },
+              "DomainName": Object {
+                "Fn::GetAtt": Array [
+                  "Alb302Redirect610ABF15",
+                  "DNSName",
+                ],
+              },
+              "Id": "origin1",
+            },
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": Object {
+            "CloudFrontDefaultCertificate": true,
+          },
+        },
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "LambdaVersionhttp30247FAA424": Object {
+      "Properties": Object {
+        "FunctionName": Object {
+          "Fn::Select": Array [
+            6,
+            Object {
+              "Fn::Split": Array [
+                ":",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "http30232E1FD3B",
+                    "Outputs.Http302Function",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
+    "Vpc8378EB38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcIGWD7BA715C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "VpcPublicSubnet1DefaultRoute3DA9E72A": Object {
+      "DependsOn": Array [
+        "VpcVPCGWBF912B6E",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPublicSubnet1RouteTable6C95E38E": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPublicSubnet1RouteTableAssociation97140677": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPublicSubnet1Subnet5C2D37C4": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/20",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcPublicSubnet2DefaultRoute97F91067": Object {
+      "DependsOn": Array [
+        "VpcVPCGWBF912B6E",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VpcPublicSubnet2RouteTable94F7E489": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcPublicSubnet2RouteTableAssociationDD5762D8": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcPublicSubnet2Subnet691E08A3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPublicSubnet2Subnet691E08A3": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.16.0/20",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "http302-demo/Vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcVPCGWBF912B6E": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "VpcIGWD7BA715C",
+        },
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "http30232E1FD3B": Object {
+      "Properties": Object {
+        "Location": Object {
+          "ApplicationId": "arn:aws:serverlessrepo:us-east-1:418289889111:applications/http302-from-origin",
+          "SemanticVersion": "1.0.2",
+        },
+      },
+      "Type": "AWS::Serverless::Application",
+    },
+  },
+  "Transform": "AWS::Serverless-2016-10-31",
+}
+`;
