@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.10](https://github.com/pahudnet/cdk-cloudfront-plus/compare/v0.2.9...v0.2.10) (2021-04-09)
+
+### [0.2.9](https://github.com/pahudnet/cdk-cloudfront-plus/compare/v0.2.8...v0.2.9) (2021-04-08)
+
+### [0.2.8](https://github.com/pahudnet/cdk-cloudfront-plus/compare/v0.2.7...v0.2.8) (2021-04-07)
+
+### [0.2.7](https://github.com/pahudnet/cdk-cloudfront-plus/compare/v0.2.6...v0.2.7) (2021-04-06)
+
+
+### Features
+
+* **SO8113:** convert query string to headers ([#53](https://github.com/pahudnet/cdk-cloudfront-plus/issues/53)) ([147209a](https://github.com/pahudnet/cdk-cloudfront-plus/commit/147209a23a7f75e78aaa3ee126725c3c2bd7d17a)), closes [#23](https://github.com/pahudnet/cdk-cloudfront-plus/issues/23)
+
 ### [0.2.6](https://github.com/pahudnet/cdk-cloudfront-plus/compare/v0.2.5...v0.2.6) (2021-04-06)
 
 

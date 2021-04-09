@@ -230,6 +230,47 @@ function bumpFunctionVersion(scope: cdk.Construct, id: string, functionArn: stri
 }
 
 /**
+ * keys options
+ */
+export interface ConvertQueryStringProps {
+  /**
+   * The request arguments that will be converted to additional request headers.
+   * For example ['key1', 'key2'] will be converted to the header `x-key1` and `x-key2`.
+   * Any other request arguments will not be converted.
+   *
+   */
+  readonly args: Array<string>;
+}
+
+/**
+ * Convert a query string to key-value pairs and add them into header.
+ *
+ *  @see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html#lambda-examples-header-based-on-query-string
+ */
+export class ConvertQueryString extends Custom {
+  readonly lambdaFunction: lambda.Version;
+  constructor(scope: cdk.Construct, id: string, props: ConvertQueryStringProps) {
+    const func = new NodejsFunction(scope, 'ConvertQueryStringFunc', {
+      entry: `${EXTENSION_ASSETS_PATH}/cf-convert-query-string/index.ts`,
+      handler: 'lambdaHandler',
+      runtime: lambda.Runtime.NODEJS_12_X,
+      bundling: {
+        define: {
+          NEEDED_KEYS: jsonStringifiedBundlingDefinition(props.args),
+        },
+      },
+    });
+    super(scope, id, {
+      func,
+      eventType: cf.LambdaEdgeEventType.ORIGIN_REQUEST,
+      solutionId: 'SO8113',
+      templateDescription: 'Cloudfront extension with AWS CDK - Convert Query String.',
+    });
+    this.lambdaFunction = this.functionVersion;
+  }
+}
+
+/**
  * Default Directory Indexes in Amazon S3-backed Amazon CloudFront Origins
  *
  *  use case - see https://aws.amazon.com/tw/blogs/compute/implementing-default-directory-indexes-in-amazon-s3-backed-amazon-cloudfront-origins-using-lambdaedge/
