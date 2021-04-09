@@ -1,81 +1,60 @@
+import * as apigw from '@aws-cdk/aws-apigatewayv2';
+import * as integrations from '@aws-cdk/aws-apigatewayv2-integrations';
 import * as cf from '@aws-cdk/aws-cloudfront';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
+import * as origins from '@aws-cdk/aws-cloudfront-origins';
+import * as lambda from '@aws-cdk/aws-lambda';
 import * as cdk from '@aws-cdk/core';
 import * as extensions from '../../extensions';
 
+export class Http302Backend extends cdk.Construct {
+  readonly endpoint: string;
+  readonly domainName: string;
+  constructor(scope: cdk.Construct, id: string) {
+    super(scope, id);
+
+    const api = new apigw.HttpApi(this, 'Api', {
+      defaultIntegration: new integrations.LambdaProxyIntegration({
+        handler: new lambda.Function(this, 'ApiHandler', {
+          runtime: lambda.Runtime.PYTHON_3_7,
+          handler: 'index.handler',
+          code: new lambda.InlineCode(`
+def handler(event, context):
+      return {
+        'statusCode': 302,
+        'headers': {
+          'location': 'https://www.google.com',
+        },
+      }`),
+        }),
+      }),
+    });
+
+    this.endpoint = api.apiEndpoint!;
+    const stack = cdk.Stack.of(this);
+    this.domainName = `${api.apiId}.execute-api.${stack.region}.${stack.urlSuffix}`;
+  }
+}
+
 const app = new cdk.App();
+
 const stack = new cdk.Stack(app, 'http302-demo');
 
 // create the cloudfront distribution with extension(s)
-const http302FromOrigin = new extensions.HTTP302FromOrigin(stack, 'http302');
+const ext = new extensions.HTTP302FromOrigin(stack, 'http302');
+const backend = new Http302Backend(stack, 'Http302Backend');
 
-// ALB
-const publicSubnet = {
-  cidrMask: 20,
-  name: 'Public',
-  subnetType: ec2.SubnetType.PUBLIC,
-};
-
-const vpc = new ec2.Vpc(stack, 'Vpc', {
-  natGateways: 0,
-  subnetConfiguration: [publicSubnet],
+// create the cloudfront distribution with extension(s)
+const dist = new cf.Distribution(stack, 'dist', {
+  defaultBehavior: {
+    origin: new origins.HttpOrigin(backend.domainName),
+    cachePolicy: cf.CachePolicy.CACHING_DISABLED,
+    edgeLambdas: [ext],
+  },
 });
 
-const demoAlb = new elbv2.ApplicationLoadBalancer(stack, 'Alb302Redirect', {
-  vpc: vpc,
-  internetFacing: true,
-});
-
-demoAlb.connections.allowFrom(ec2.Peer.anyIpv4(), ec2.Port.tcp(80));
-demoAlb.addListener('Alb302RedirectRule', {
-  port: 80,
-  defaultAction: elbv2.ListenerAction.redirect({
-    protocol: 'HTTP',
-    host: 'neverssl.com',
-    path: '/',
-  }),
-});
-
-// cloudfront without lambda function
-const demoCloudFrontNoLambda = new cf.CloudFrontWebDistribution(stack, 'DemoCloudFrontNoLambda', {
-  viewerProtocolPolicy: cf.ViewerProtocolPolicy.ALLOW_ALL,
-  originConfigs: [
-    {
-      customOriginSource: {
-        originProtocolPolicy: cf.OriginProtocolPolicy.HTTP_ONLY,
-        domainName: demoAlb.loadBalancerDnsName,
-      },
-      behaviors: [{
-        isDefaultBehavior: true,
-      }],
-    },
-  ],
-});
-
-// cloudfront
-const demoCloudFront = new cf.CloudFrontWebDistribution(stack, 'DemoCloudFront', {
-  viewerProtocolPolicy: cf.ViewerProtocolPolicy.ALLOW_ALL,
-  originConfigs: [
-    {
-      customOriginSource: {
-        originProtocolPolicy: cf.OriginProtocolPolicy.HTTP_ONLY,
-        domainName: demoAlb.loadBalancerDnsName,
-      },
-      behaviors: [{
-        isDefaultBehavior: true,
-        lambdaFunctionAssociations: [http302FromOrigin],
-      }],
-    },
-  ],
-});
-
-new cdk.CfnOutput(stack, 'demoAlbDomainName', {
-  value: 'http://' + demoAlb.loadBalancerDnsName,
-});
-new cdk.CfnOutput(stack, 'demoDomainNameNoLambda', {
-  value: 'http://' + demoCloudFrontNoLambda.distributionDomainName,
+new cdk.CfnOutput(stack, 'BackendApiEndpoint', {
+  value: backend.endpoint,
 });
 new cdk.CfnOutput(stack, 'demoDomainName', {
-  value: 'http://' + demoCloudFront.distributionDomainName,
+  value: 'http://' + dist.distributionDomainName,
 });

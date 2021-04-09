@@ -11,6 +11,7 @@ Name|Description
 [DefaultDirIndex](#cdk-cloudfront-plus-defaultdirindex)|Default Directory Indexes in Amazon S3-backed Amazon CloudFront Origins.
 [Distribution](#cdk-cloudfront-plus-distribution)|*No description*
 [GlobalDataIngestion](#cdk-cloudfront-plus-globaldataingestion)|Ingest data to Kinesis Firehose by nearest cloudfront edge.
+[HTTP302FromOrigin](#cdk-cloudfront-plus-http302fromorigin)|The HTTP[302] from origin extension.
 [ModifyResponseHeader](#cdk-cloudfront-plus-modifyresponseheader)|The modify response header extension.
 [MultipleOriginIpRetry](#cdk-cloudfront-plus-multipleoriginipretry)|Multiple Origin IP Retry extension.
 [NormalizeQueryString](#cdk-cloudfront-plus-normalizequerystring)|Normalize Query String extension.
@@ -279,6 +280,36 @@ new GlobalDataIngestion(scope: Construct, id: string, props: GlobalDataIngestion
 * **id** (<code>string</code>)  *No description*
 * **props** (<code>[GlobalDataIngestionProps](#cdk-cloudfront-plus-globaldataingestionprops)</code>)  *No description*
   * **firehoseStreamName** (<code>string</code>)  Kinesis Firehose DeliveryStreamName. 
+
+
+
+### Properties
+
+
+Name | Type | Description 
+-----|------|-------------
+**lambdaFunction** | <code>[Version](#aws-cdk-aws-lambda-version)</code> | <span></span>
+
+
+
+## class HTTP302FromOrigin  <a id="cdk-cloudfront-plus-http302fromorigin"></a>
+
+The HTTP[302] from origin extension.
+
+__Implements__: [IConstruct](#constructs-iconstruct), [IConstruct](#aws-cdk-core-iconstruct), [IConstruct](#constructs-iconstruct), [IDependable](#aws-cdk-core-idependable), [ITaggable](#aws-cdk-core-itaggable), [IExtensions](#cdk-cloudfront-plus-iextensions)
+__Extends__: [Custom](#cdk-cloudfront-plus-custom)
+
+### Initializer
+
+
+
+
+```ts
+new HTTP302FromOrigin(scope: Construct, id: string)
+```
+
+* **scope** (<code>[Construct](#aws-cdk-core-construct)</code>)  *No description*
+* **id** (<code>string</code>)  *No description*
 
 
 
@@ -634,7 +665,7 @@ Name | Type | Description
 
 ## interface IExtensions  <a id="cdk-cloudfront-plus-iextensions"></a>
 
-__Implemented by__: [AccessOriginByGeolocation](#cdk-cloudfront-plus-accessoriginbygeolocation), [AntiHotlinking](#cdk-cloudfront-plus-antihotlinking), [Custom](#cdk-cloudfront-plus-custom), [CustomErrorPage](#cdk-cloudfront-plus-customerrorpage), [DefaultDirIndex](#cdk-cloudfront-plus-defaultdirindex), [GlobalDataIngestion](#cdk-cloudfront-plus-globaldataingestion), [ModifyResponseHeader](#cdk-cloudfront-plus-modifyresponseheader), [MultipleOriginIpRetry](#cdk-cloudfront-plus-multipleoriginipretry), [NormalizeQueryString](#cdk-cloudfront-plus-normalizequerystring), [OAuth2AuthorizationCodeGrant](#cdk-cloudfront-plus-oauth2authorizationcodegrant), [RedirectByGeolocation](#cdk-cloudfront-plus-redirectbygeolocation), [SecurtyHeaders](#cdk-cloudfront-plus-securtyheaders), [SimpleLambdaEdge](#cdk-cloudfront-plus-simplelambdaedge)
+__Implemented by__: [AccessOriginByGeolocation](#cdk-cloudfront-plus-accessoriginbygeolocation), [AntiHotlinking](#cdk-cloudfront-plus-antihotlinking), [Custom](#cdk-cloudfront-plus-custom), [CustomErrorPage](#cdk-cloudfront-plus-customerrorpage), [DefaultDirIndex](#cdk-cloudfront-plus-defaultdirindex), [GlobalDataIngestion](#cdk-cloudfront-plus-globaldataingestion), [HTTP302FromOrigin](#cdk-cloudfront-plus-http302fromorigin), [ModifyResponseHeader](#cdk-cloudfront-plus-modifyresponseheader), [MultipleOriginIpRetry](#cdk-cloudfront-plus-multipleoriginipretry), [NormalizeQueryString](#cdk-cloudfront-plus-normalizequerystring), [OAuth2AuthorizationCodeGrant](#cdk-cloudfront-plus-oauth2authorizationcodegrant), [RedirectByGeolocation](#cdk-cloudfront-plus-redirectbygeolocation), [SecurtyHeaders](#cdk-cloudfront-plus-securtyheaders), [SimpleLambdaEdge](#cdk-cloudfront-plus-simplelambdaedge)
 
 The Extension interface.
 

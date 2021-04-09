@@ -41,6 +41,10 @@
       "type": "build"
     },
     {
+      "name": "axios",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },
@@ -95,7 +99,7 @@
     },
     {
       "name": "projen",
-      "version": "^0.17.25",
+      "version": "^0.17.30",
       "type": "build"
     },
     {
@@ -110,6 +114,16 @@
     {
       "name": "dotenv",
       "type": "bundled"
+    },
+    {
+      "name": "@aws-cdk/aws-apigatewayv2-integrations",
+      "version": "^1.73.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-apigatewayv2",
+      "version": "^1.73.0",
+      "type": "peer"
     },
     {
       "name": "@aws-cdk/aws-cloudfront-origins",
@@ -127,11 +141,6 @@
       "type": "peer"
     },
     {
-      "name": "@aws-cdk/aws-elasticloadbalancingv2",
-      "version": "^1.73.0",
-      "type": "peer"
-    },
-    {
       "name": "@aws-cdk/aws-iam",
       "version": "^1.73.0",
       "type": "peer"
@@ -143,6 +152,11 @@
     },
     {
       "name": "@aws-cdk/aws-lambda-nodejs",
+      "version": "^1.73.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
       "version": "^1.73.0",
       "type": "peer"
     },
@@ -177,6 +191,16 @@
       "type": "peer"
     },
     {
+      "name": "@aws-cdk/aws-apigatewayv2-integrations",
+      "version": "^1.73.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-cdk/aws-apigatewayv2",
+      "version": "^1.73.0",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-cdk/aws-cloudfront-origins",
       "version": "^1.73.0",
       "type": "runtime"
@@ -192,11 +216,6 @@
       "type": "runtime"
     },
     {
-      "name": "@aws-cdk/aws-elasticloadbalancingv2",
-      "version": "^1.73.0",
-      "type": "runtime"
-    },
-    {
       "name": "@aws-cdk/aws-iam",
       "version": "^1.73.0",
       "type": "runtime"
@@ -208,6 +227,11 @@
     },
     {
       "name": "@aws-cdk/aws-lambda-nodejs",
+      "version": "^1.73.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
       "version": "^1.73.0",
       "type": "runtime"
     },

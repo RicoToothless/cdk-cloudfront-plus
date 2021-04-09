@@ -1,366 +1,388 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`check ALB & cloudfront setting 1`] = `
+exports[`basic minimal setting 1`] = `
 Object {
+  "Parameters": Object {
+    "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17ArtifactHash166F4C6F": Object {
+      "Description": "Artifact hash for asset \\"90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17\\"",
+      "Type": "String",
+    },
+    "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17S3Bucket853C4D96": Object {
+      "Description": "S3 bucket for asset \\"90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17\\"",
+      "Type": "String",
+    },
+    "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17S3VersionKeyE0B49E48": Object {
+      "Description": "S3 key for asset version \\"90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17\\"",
+      "Type": "String",
+    },
+    "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aArtifactHash5A556600": Object {
+      "Description": "Artifact hash for asset \\"9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9a\\"",
+      "Type": "String",
+    },
+    "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aS3BucketA74C34AE": Object {
+      "Description": "S3 bucket for asset \\"9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9a\\"",
+      "Type": "String",
+    },
+    "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aS3VersionKeyF58998F8": Object {
+      "Description": "S3 key for asset version \\"9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9a\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
-    "Alb302Redirect610ABF15": Object {
+    "HTTP302FromOriginFuncCurrentVersionD9CC98DE3a7d80ddb7d15bf1a16e1b9ada5ed143": Object {
+      "Properties": Object {
+        "FunctionName": Object {
+          "Ref": "HTTP302FromOriginFuncFCF29B3D",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
+    "HTTP302FromOriginFuncFCF29B3D": Object {
       "DependsOn": Array [
-        "VpcPublicSubnet1DefaultRoute3DA9E72A",
-        "VpcPublicSubnet2DefaultRoute97F91067",
+        "HTTP302FromOriginFuncServiceRole8573319E",
       ],
       "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aS3BucketA74C34AE",
           },
-        ],
-        "Scheme": "internet-facing",
-        "SecurityGroups": Array [
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aS3VersionKeyF58998F8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters9605a2452c63a7be4282f8171b34163c260984550c4fae0b7b3440e1bec06f9aS3VersionKeyF58998F8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "HTTP302FromOriginFuncServiceRole8573319E",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "HTTP302FromOriginFuncServiceRole8573319E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "edgelambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
           Object {
-            "Fn::GetAtt": Array [
-              "Alb302RedirectSecurityGroupDF0A30D2",
-              "GroupId",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
             ],
           },
         ],
-        "Subnets": Array [
-          Object {
-            "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
-          },
-          Object {
-            "Ref": "VpcPublicSubnet2Subnet691E08A3",
-          },
-        ],
-        "Type": "application",
       },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Type": "AWS::IAM::Role",
     },
-    "Alb302RedirectAlb302RedirectRule473E60D9": Object {
+    "Http302BackendApi46848EE2": Object {
       "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "RedirectConfig": Object {
-              "Host": "neverssl.com",
-              "Path": "/",
-              "Protocol": "HTTP",
-              "StatusCode": "HTTP_302",
+        "Name": "Api",
+        "ProtocolType": "HTTP",
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "Http302BackendApiDefaultRoute7112E15C": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "Http302BackendApi46848EE2",
+        },
+        "RouteKey": "$default",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "Http302BackendApiDefaultRouteHttpIntegrationc215ad17e500fa5f795a6217c8fa26175FBA1102",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "Http302BackendApiDefaultRouteHttpIntegrationc215ad17e500fa5f795a6217c8fa26175FBA1102": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "Http302BackendApi46848EE2",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "Http302BackendApiHandler9929FF39",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "Http302BackendApiDefaultRoutehttp302integHttp302BackendApiDefaultRoute3B47ECACPermission1698A30A": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "Http302BackendApiHandler9929FF39",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "Http302BackendApi46848EE2",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "Http302BackendApiDefaultStage79776818": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "Http302BackendApi46848EE2",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "Http302BackendApiHandler9929FF39": Object {
+      "DependsOn": Array [
+        "Http302BackendApiHandlerServiceRole569A6A26",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ZipFile": "
+def handler(event, context):
+      return {
+        'statusCode': 302,
+        'headers': {
+          'location': 'https://www.google.com',
+        },
+      }",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "Http302BackendApiHandlerServiceRole569A6A26",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.7",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "Http302BackendApiHandlerServiceRole569A6A26": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
             },
-            "Type": "redirect",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "Alb302Redirect610ABF15",
+          ],
+          "Version": "2012-10-17",
         },
-        "Port": 80,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "Alb302RedirectSecurityGroupDF0A30D2": Object {
-      "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB http302demoAlb302Redirect0EDBCCB6",
-        "SecurityGroupEgress": Array [
+        "ManagedPolicyArns": Array [
           Object {
-            "CidrIp": "255.255.255.255/32",
-            "Description": "Disallow all traffic",
-            "FromPort": 252,
-            "IpProtocol": "icmp",
-            "ToPort": 86,
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
           },
         ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
       },
-      "Type": "AWS::EC2::SecurityGroup",
+      "Type": "AWS::IAM::Role",
     },
-    "DemoCloudFrontCFDistributionDD56E6FE": Object {
+    "dist3D2177D6": Object {
       "Properties": Object {
         "DistributionConfig": Object {
           "DefaultCacheBehavior": Object {
-            "AllowedMethods": Array [
-              "GET",
-              "HEAD",
-            ],
-            "CachedMethods": Array [
-              "GET",
-              "HEAD",
-            ],
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
             "Compress": true,
-            "ForwardedValues": Object {
-              "Cookies": Object {
-                "Forward": "none",
-              },
-              "QueryString": false,
-            },
             "LambdaFunctionAssociations": Array [
               Object {
                 "EventType": "origin-response",
+                "IncludeBody": false,
                 "LambdaFunctionARN": Object {
-                  "Ref": "LambdaVersionhttp30247FAA424",
+                  "Ref": "HTTP302FromOriginFuncCurrentVersionD9CC98DE3a7d80ddb7d15bf1a16e1b9ada5ed143",
                 },
               },
             ],
-            "TargetOriginId": "origin1",
+            "TargetOriginId": "http302integdistOrigin10203AD1A",
             "ViewerProtocolPolicy": "allow-all",
           },
-          "DefaultRootObject": "index.html",
           "Enabled": true,
           "HttpVersion": "http2",
           "IPV6Enabled": true,
           "Origins": Array [
             Object {
-              "ConnectionAttempts": 3,
-              "ConnectionTimeout": 10,
               "CustomOriginConfig": Object {
-                "HTTPPort": 80,
-                "HTTPSPort": 443,
-                "OriginKeepaliveTimeout": 5,
-                "OriginProtocolPolicy": "http-only",
-                "OriginReadTimeout": 30,
+                "OriginProtocolPolicy": "https-only",
                 "OriginSSLProtocols": Array [
                   "TLSv1.2",
                 ],
               },
               "DomainName": Object {
-                "Fn::GetAtt": Array [
-                  "Alb302Redirect610ABF15",
-                  "DNSName",
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Ref": "Http302BackendApi46848EE2",
+                    },
+                    ".execute-api.",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ".",
+                    Object {
+                      "Ref": "AWS::URLSuffix",
+                    },
+                  ],
                 ],
               },
-              "Id": "origin1",
+              "Id": "http302integdistOrigin10203AD1A",
             },
           ],
-          "PriceClass": "PriceClass_100",
-          "ViewerCertificate": Object {
-            "CloudFrontDefaultCertificate": true,
-          },
         },
       },
       "Type": "AWS::CloudFront::Distribution",
     },
-    "LambdaVersionhttp30247FAA424": Object {
+    "http302NestedStackhttp302NestedStackResource36338782": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
-        "FunctionName": Object {
-          "Fn::Select": Array [
-            6,
-            Object {
-              "Fn::Split": Array [
-                ":",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "http30232E1FD3B",
-                    "Outputs.Http302Function",
-                  ],
-                },
-              ],
-            },
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17S3Bucket853C4D96",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17S3VersionKeyE0B49E48",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters90d553a62b70bc897a968de82edcb8734c9635d27a03fc94687ef12bef93bb17S3VersionKeyE0B49E48",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           ],
         },
       },
-      "Type": "AWS::Lambda::Version",
-    },
-    "Vpc8378EB38": Object {
-      "Properties": Object {
-        "CidrBlock": "10.0.0.0/16",
-        "EnableDnsHostnames": true,
-        "EnableDnsSupport": true,
-        "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::VPC",
-    },
-    "VpcIGWD7BA715C": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::InternetGateway",
-    },
-    "VpcPublicSubnet1DefaultRoute3DA9E72A": Object {
-      "DependsOn": Array [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcPublicSubnet1RouteTable6C95E38E": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc/PublicSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcPublicSubnet1RouteTableAssociation97140677": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcPublicSubnet1Subnet5C2D37C4": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            0,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.0.0/20",
-        "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc/PublicSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcPublicSubnet2DefaultRoute97F91067": Object {
-      "DependsOn": Array [
-        "VpcVPCGWBF912B6E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "RouteTableId": Object {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
-        },
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "VpcPublicSubnet2RouteTable94F7E489": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc/PublicSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcPublicSubnet2Subnet691E08A3": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            1,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.16.0/20",
-        "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "http302-demo/Vpc/PublicSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcVPCGWBF912B6E": Object {
-      "Properties": Object {
-        "InternetGatewayId": Object {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-    },
-    "http30232E1FD3B": Object {
-      "Properties": Object {
-        "Location": Object {
-          "ApplicationId": "arn:aws:serverlessrepo:us-east-1:418289889111:applications/http302-from-origin",
-          "SemanticVersion": "1.0.2",
-        },
-      },
-      "Type": "AWS::Serverless::Application",
+      "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
   },
-  "Transform": "AWS::Serverless-2016-10-31",
 }
 `;
