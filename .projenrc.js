@@ -27,7 +27,6 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-sam',
     '@aws-cdk/aws-s3',
     '@aws-cdk/aws-s3-deployment',
-    '@aws-cdk/aws-ec2',
   ],
   devDeps: [
     '@types/node',
